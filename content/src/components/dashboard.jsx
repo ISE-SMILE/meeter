@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Nodeview from './nodeView';
-import { Container,Row } from 'react-bootstrap';
+import { Button, Container,Row } from 'react-bootstrap';
+import ProgressBar from './progessBar';
 
 class Dashboard extends Component {
     state = {  
@@ -15,6 +16,8 @@ class Dashboard extends Component {
             // }
         ],
         listening:false,
+        progress : [],
+        finished: false
     }
 
 
@@ -27,8 +30,10 @@ class Dashboard extends Component {
         if(websocket != null){
             websocket.onmessage = evt => {
                 // listen to data sent from the websocket server
-                const nodes = JSON.parse(evt.data)
-                this.setState({nodes: nodes})
+                const data=JSON.parse(evt.data)
+                const nodes = data.nodes
+                const progress= data.progress
+                this.setState({nodes: nodes, progress: progress})
             }
         }
     }
@@ -66,12 +71,24 @@ class Dashboard extends Component {
             /></Row>
          )
     }
+    progress(){
+        return this.state.progress.map((val,index) =>
+        <Row key={index}>{index}<ProgressBar bgcolor={"#6a1b9a"} completed={val}/></Row>)
+    }
+
+    
+    continue(){
+        return (this.state.progress[0]===100)?<Button onClick={this.props.finished}>Results</Button>:
+        <Row/>
+    }
 
     render() { 
         return (
             <Container fluid className="dashboard">
+                {this.progress()}
                 {this.connect(this.props.websocket)}
                 {this.build()}
+                {this.continue()}
             </Container>
         );
     }

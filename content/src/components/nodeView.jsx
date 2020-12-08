@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Card, Container } from 'react-bootstrap';
 import Graph from './nodeGraph';
 import HeatMap from './heatMap';
+import Gauge from './gauge'
 class Nodeview extends Component {
     state = { 
 
@@ -33,9 +34,10 @@ class Nodeview extends Component {
                     <Container fluid>
                         <Row>
                             <Col ms={3} ><HeatMap data={this.props.runtimes}/></Col>
-                            <Col xs={3}><Graph color="128,29,211" title="CPU" data={this.props.cpu} labels={this.props.labels}/></Col>
-                            <Col xs={3}><Graph color="128,211,29" title="MEM" data={this.props.mem} labels={this.props.labels}/></Col>
-                            <Col xs={3}><Graph color="128,29,211" title="Net" data={this.props.net} labels={this.props.labels}/></Col>
+                            <Col xs={3}><Gauge value={this.props.cpu*100} /></Col>
+                            <Col xs={3}><Gauge value={this.props.mem} /></Col>
+                            <Col xs={3}><Gauge value={this.props.net} /></Col>
+                        
                         </Row>
                     </Container>
                 </Card.Body>

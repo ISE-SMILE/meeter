@@ -33,7 +33,8 @@ class Dashboard extends Component {
                 const data=JSON.parse(evt.data)
                 const nodes = data.nodes
                 const progress= data.progress
-                this.setState({nodes: nodes, progress: progress})
+                const phase= data.phase
+                this.setState({nodes: nodes, progress: progress, phase:phase})
             }
         }
     }
@@ -64,16 +65,16 @@ class Dashboard extends Component {
         return this.state.nodes.map( (val,index) => 
             <Row key={index} ><Nodeview key={val.name} header={index===0} name={val.name}  
             runtimes={val.runtimes} 
-            labels={val.labels} 
             cpu={val.cpu} 
-            mem={val.mem} 
-            net={val.net} 
+            //mem={val.mem} 
+            //net={val.net} 
             /></Row>
+            
          )
     }
     progress(){
         return this.state.progress.map((val,index) =>
-        <Row key={index}>{index}<ProgressBar bgcolor={"#6a1b9a"} completed={val}/></Row>)
+        <Row key={index}>{this.state.phase[index]}<ProgressBar bgcolor={"#6a1b9a"} completed={val}/></Row>)
     }
 
     

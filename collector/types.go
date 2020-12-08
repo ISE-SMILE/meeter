@@ -5,12 +5,12 @@ import (
 )
 
 type Message struct {
-	Name     string    `json:"name"`
-	Runtimes []int8    `json:"runtimes"`
-	Labels   []string  `json:"labels"`
-	CPU      []float64 `json:"cpu"`
-	MEM      []float64 `json:"mem"`
-	NET      []float64 `json:"net"`
+	Name     string  `json:"name"`
+	Runtimes []int8  `json:"runtimes"`
+	CPU      float64 `json:"cpu"`
+	MEM      float64 `json:"mem"`
+	NET      float64 `json:"net"`
+	CPUMax   float64 `json:"cpuMax`
 }
 
 type NodeMetrics struct {
@@ -24,4 +24,10 @@ type DockerMetrics struct {
 	Paused  int    `json:"paused"`
 	Total   int    `json:"total"`
 	State   []int8 `json:"stateArray"`
+}
+
+type ProgressMessage struct {
+	Messages []Message `json:"nodes"`
+	Progress []int8    `json:"progress"`
+	Phase    []string  `json:"phase"`
 }

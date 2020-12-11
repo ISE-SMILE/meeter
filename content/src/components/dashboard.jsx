@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Nodeview from './nodeView';
-import { Container,Row } from 'react-bootstrap';
+import { Button, Container,Row } from 'react-bootstrap';
+import ProgressBar from './progessBar';
 
 class Dashboard extends Component {
     state = {  
@@ -15,6 +16,8 @@ class Dashboard extends Component {
             // }
         ],
         listening:false,
+        progress : [],
+        finished: false
     }
 
 
@@ -27,8 +30,11 @@ class Dashboard extends Component {
         if(websocket != null){
             websocket.onmessage = evt => {
                 // listen to data sent from the websocket server
-                const nodes = JSON.parse(evt.data)
-                this.setState({nodes: nodes})
+                const data=JSON.parse(evt.data)
+                const nodes = data.nodes
+                const progress= data.progress
+                const phase= data.phase
+                this.setState({nodes: nodes, progress: progress, phase:phase})
             }
         }
     }
@@ -59,19 +65,31 @@ class Dashboard extends Component {
         return this.state.nodes.map( (val,index) => 
             <Row key={index} ><Nodeview key={val.name} header={index===0} name={val.name}  
             runtimes={val.runtimes} 
-            labels={val.labels} 
             cpu={val.cpu} 
-            mem={val.mem} 
-            net={val.net} 
+            //mem={val.mem} 
+            //net={val.net} 
             /></Row>
+            
          )
+    }
+    progress(){
+        return this.state.progress.map((val,index) =>
+        <Row key={index}>{this.state.phase[index]}<ProgressBar bgcolor={"#6a1b9a"} completed={val}/></Row>)
+    }
+
+    
+    continue(){
+        return (this.state.progress[0]===100)?<Button onClick={this.props.finished}>Results</Button>:
+        <Row/>
     }
 
     render() { 
         return (
             <Container fluid className="dashboard">
+                {this.progress()}
                 {this.connect(this.props.websocket)}
                 {this.build()}
+                {this.continue()}
             </Container>
         );
     }

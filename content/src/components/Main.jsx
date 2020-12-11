@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import Dashboard from './dashboard';
-import { Spinner } from 'react-bootstrap';
+import {  Spinner } from 'react-bootstrap';
+import Results from './results';
+import StartPage from './startPage';
 
 class Main extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            ws: null
+            ws: null,
+            started: false,
+            finished: false
         };
     }
 
@@ -75,14 +79,30 @@ class Main extends Component {
         const { ws } = this.state;
         return (!ws || ws.readyState === WebSocket.CLOSED)
     }
+    start = () =>{
+        this.setState({started:true})
+    }
+    finished = () =>{
+        this.setState({finished:true})
+    }
+    again = () =>{
+        this.setState({started:false, finished:false})
+    }
+
 
     render() {
-        return (!this.isConnected())?<Dashboard key={"view"} websocket={this.state.ws} />:
-        <div className="text-center">
-            <Spinner animation="border" role={"status"}>
-                <span className="sr-only" >Loading...</span>
-            </Spinner>
-        </div>;
+        if(!this.state.started){
+            return <StartPage start={this.start}/>
+        }
+        if(!this.state.finished){
+            return (!this.isConnected())?<Dashboard key={"view"} websocket={this.state.ws} finished={this.finished} />:
+            <div className="text-center">
+                <Spinner animation="border" role={"status"}>
+                    <span className="sr-only" >Loading...</span>
+                </Spinner>
+            </div>;}
+
+        return <Results again={this.again}/>
     }
 }
 

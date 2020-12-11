@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Nodeview from './nodeView';
-import { Button, Container,Row } from 'react-bootstrap';
-import ProgressBar from './progessBar';
+import { Button, Container,Row, Col, Card } from 'react-bootstrap';
+//import ProgressBar from './progessBar';
 
 class Dashboard extends Component {
     state = {  
@@ -34,7 +34,8 @@ class Dashboard extends Component {
                 const nodes = data.nodes
                 const progress= data.progress
                 const phase= data.phase
-                this.setState({nodes: nodes, progress: progress, phase:phase})
+                const done =data.done
+                this.setState({nodes: nodes, progress: progress, phase:phase, done:done})
             }
         }
     }
@@ -65,32 +66,33 @@ class Dashboard extends Component {
         return this.state.nodes.map( (val,index) => 
             <Row key={index} ><Nodeview key={val.name} header={index===0} name={val.name}  
             runtimes={val.runtimes} 
-            cpu={val.cpu} 
+            cpu={val.cpu}
+            prog={this.state.progress[0]} 
             //mem={val.mem} 
             //net={val.net} 
             /></Row>
             
          )
     }
-    progress(){
-        return this.state.progress.map((val,index) =>
-        <Row key={index}>{this.state.phase[index]}<ProgressBar bgcolor={"#6a1b9a"} completed={val}/></Row>)
-    }
-
+    
     
     continue(){
-        return (this.state.progress[0]===100)?<Button onClick={this.props.finished}>Results</Button>:
-        <Row/>
+        return (this.state.done)?<Button onClick={this.props.finished} style={{float:"right"}}>Results</Button>:<div/>
+        
     }
 
     render() { 
         return (
-            <Container fluid className="dashboard">
-                {this.progress()}
+            <Card className="shadow-sm" >
+                <Card.Header>Dashboard</Card.Header>
+                <Container >
                 {this.connect(this.props.websocket)}
                 {this.build()}
-                {this.continue()}
-            </Container>
+                </Container>
+               
+        <Card.Footer><Container >Processing: testdata.csv {this.continue()}</Container></Card.Footer>
+            </Card>
+            
         );
     }
 }

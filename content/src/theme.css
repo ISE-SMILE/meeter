@@ -5,3 +5,19 @@ body{
 .dashboard {
     margin: 40px 0px;
 }
+.progress-bar{
+    height: 10em;
+}
+.progress {
+    line-height: 10em;
+  }
+.btn{
+    background-color: #4834d4;
+}
+.btn-primary{
+    border-color: dbdbe7;
+
+}
+.row{
+    margin-top: 1em;
+}

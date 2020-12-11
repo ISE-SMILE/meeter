@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, Container } from 'react-bootstrap';
+import ProgressBar from './progessBar';
 import Graph from './nodeGraph';
 import HeatMap from './heatMap';
 import Gauge from './gauge'
@@ -28,21 +29,20 @@ class Nodeview extends Component {
 
     render() { 
         return (
-            <Card className="shadow-sm">
-                {this.header()}
-                <Card.Body>
+           
                     <Container fluid>
+                    <Row>
+                        <Col><h6 style={{margin:5}}>Total Progress</h6><ProgressBar completed={this.props.prog} label={`${this.props.prog}%`} style={{width:'100%'}} /></Col>
+                    </Row>
                         <Row>
                             <Col ms={3} ><HeatMap data={this.props.runtimes}/></Col>
-                            <Col xs={3}><Gauge value={this.props.cpu*100} /></Col>
-                            <Col xs={3}><Gauge value={this.props.mem} /></Col>
-                            <Col xs={3}><Gauge value={this.props.net} /></Col>
+                            <Col xs={3}><Gauge value={this.props.cpu*100} label="CPU usage" /></Col>
+                            <Col xs={3}><Gauge value={this.props.mem} label ="MEM usage"/></Col>
+                            <Col xs={3}><Gauge value={this.props.net} label ="Network"/></Col>
                         
                         </Row>
                     </Container>
-                </Card.Body>
-        <Card.Footer className="text-right">{this.props.name}</Card.Footer>
-            </Card>
+
         );
     }
 }

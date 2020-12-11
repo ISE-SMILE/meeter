@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import {Button, Container} from 'react-bootstrap';
+import {Button, Card, Container} from 'react-bootstrap';
 
 
 class Results extends Component{
 
     render(){
-        return <Container>
-            <Button onClick={this.props.again} style={{alignSelf: 'flex-end'}}>Do it again</Button>
-        </Container>
+        return <Card>
+            <Card.Header>Results</Card.Header>
+            <Card.Body> Tolle grafiken! alles super schnell und billig gewesen</Card.Body>
+            <Card.Footer><Button onClick={this.props.again} style={{float:"right"}} >Do it again</Button></Card.Footer>
+        </Card>
     }
 }
 

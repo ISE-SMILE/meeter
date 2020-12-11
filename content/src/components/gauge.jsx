@@ -111,7 +111,7 @@ const Gauge = ({
                 fontWeight: "900",
                 fontFeatureSettings: "'zero', 'tnum' 1",
             }}>
-                { format(",")(value) }
+                { format(",")(value) }%
             </div>
             {!!label && (
                 <div style={{

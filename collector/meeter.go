@@ -91,6 +91,7 @@ func (m *Metrics) Stream(w http.ResponseWriter, r *http.Request) {
 			progRand = append(progRand, int8(rand.Intn(101)))
 			progress.Progress = progRand
 			progress.Phase = phases
+			progress.Done = true
 			err := c.WriteJSON(progress)
 			if err != nil {
 				_ = c.Close()

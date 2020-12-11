@@ -30,4 +30,5 @@ type ProgressMessage struct {
 	Messages []Message `json:"nodes"`
 	Progress []int8    `json:"progress"`
 	Phase    []string  `json:"phase"`
+	Done     bool      `json:"done"`
 }

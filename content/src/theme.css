@@ -13,6 +13,11 @@ body{
   }
 .btn{
     background-color: #4834d4;
+    color: "#8b8ba7";
+    marginTop: "0.6em";
+    fontSize: "1.3em";
+    lineHeight: "1.3em";
+    fontWeight: "700";
 }
 .btn-primary{
     border-color: dbdbe7;

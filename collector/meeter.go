@@ -30,8 +30,12 @@ func (m *Metrics) data() []Message {
 	for _, n := range m.nodes {
 		message := Message{}
 
-		cpu := 0.0
-		mem := 0.0
+		cpuIdle := 0.0
+		cpuLoad := 0.0
+		memFree := 0.0
+		memTotal := 0.0
+		netRec := 0.0
+		netTra := 0.0
 		net := 0.0
 
 		var _netRev *float64
@@ -48,15 +52,23 @@ func (m *Metrics) data() []Message {
 					_netTra = &nodeMetrics.NetTra
 				}
 
-				cpu = nodeMetrics.Load
-				mem = nodeMetrics.MemUsage
+				cpuIdle = nodeMetrics.CPUIdle
+				cpuLoad = nodeMetrics.CPUIOWait + nodeMetrics.CPUSystem + nodeMetrics.CPUUser
+				memFree = nodeMetrics.MemFree
+				memTotal = nodeMetrics.MemTotal
+				netRec = nodeMetrics.NetRev
+				netTra = nodeMetrics.NetTra
 				net = (nodeMetrics.NetTra - *_netTra) - (nodeMetrics.NetRev - *_netRev)
 
 			}
 		})
 
-		message.CPU = cpu
-		message.MEM = mem
+		message.CPUIdle = cpuIdle
+		message.CPULoad = cpuLoad
+		message.MEMfree = memFree
+		message.MEMTotal = memTotal
+		message.NETRec = netRec
+		message.NETTra = netTra
 		message.NET = net
 
 		if m.dockerMetrics[n] != nil {
@@ -85,9 +97,6 @@ func (m *Metrics) Stream(w http.ResponseWriter, r *http.Request) {
 			progress.Messages = m.data()
 			progRand := make([]int8, 0)
 			phases := make([]string, 0)
-			phases = append(phases, "Total")
-			phases = append(phases, "Starting")
-			progRand = append(progRand, 100)
 			progRand = append(progRand, int8(rand.Intn(101)))
 			progress.Progress = progRand
 			progress.Phase = phases

@@ -3,7 +3,7 @@ import {Button, Card, Container} from 'react-bootstrap';
 
 class StartPage extends Component{
     render(){
-        return <Card>
+        return <Card style={{marginTop:"20px"}}>
             <Card.Header>
             <img src='/SMILE_logo.png' alt="SMILE logo"/>
             </Card.Header>

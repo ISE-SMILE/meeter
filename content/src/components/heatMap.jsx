@@ -13,6 +13,7 @@ class HeatMap extends Component {
         const ctx = canvas.getContext("2d")
         const width = canvas.width;
         const height = canvas.height;
+        
   
         const box = (width-(margin*blockPerRow*2))/blockPerRow;
         const max_rows = Math.floor(height/(box+2*margin));
@@ -51,7 +52,7 @@ class HeatMap extends Component {
     render() {
         return(
             <React.Fragment>
-                <canvas ref="canvas" className="ms-3" style={{height:"100%", width:"100%"}}  />
+                <canvas ref="canvas" className="ms-3" style={{height:"100%", width:"100%", backgroundColor:"#e0e0de"}}  />
             </React.Fragment>
         )
     }

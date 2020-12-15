@@ -62,17 +62,36 @@ class Dashboard extends Component {
         return (websocket && websocket.readyState !== WebSocket.CLOSED) && this.state.listening;
     }
 
+
     build(){
-        return this.state.nodes.map( (val,index) => 
-            <Row key={index} ><Nodeview key={val.name} header={index===0} name={val.name}  
-            runtimes={val.runtimes} 
-            cpu={val.cpu}
-            prog={this.state.progress[0]} 
-            //mem={val.mem} 
-            //net={val.net} 
-            /></Row>
+        var res={runtimes:[], cpuIdle:0, cpuLoad:0,memFree:0,memTotal:0,net:0, netTra:0, netRec:0}
+        var node;
+        for (node of this.state.nodes){
+            res.runtimes=res.runtimes.concat(node.runtimes)
+            res.cpuIdle+=node.cpuIdle
+            res.cpuLoad+=node.cpuLoad
+            res.memFree+= node.memFree
+            res.memTotal+= node.memTotal
+            res.netRec+=node.netRec
+            res.netTra+=node.netTra
+            res.net+=node.net
             
-         )
+        }
+
+        const allRuntimes= res.runtimes
+        const allCpu=res.cpuLoad/(res.cpuLoad+res.cpuIdle)
+        const allMem=(res.memTotal-res.memFree)/res.memTotal
+        const allNet=(res.netRec+res.netTra)/(this.state.nodes.length*1000000000)
+        return( 
+            <Row key="dashboard" ><Nodeview  
+            runtimes={allRuntimes} 
+            cpu={allCpu}
+            prog={this.state.progress[0]} 
+            mem={allMem} 
+            net={allNet} 
+            /></Row>
+        )
+         
     }
     
     
@@ -80,11 +99,21 @@ class Dashboard extends Component {
         return (this.state.done)?<Button onClick={this.props.finished} style={{float:"right"}}>Results</Button>:<div/>
         
     }
-
+   
     render() { 
+        
+
         return (
-            <Card className="shadow-sm" >
-                <Card.Header>Dashboard</Card.Header>
+            <Card className="shadow-sm" style={{marginTop: "20px"}} >
+                <Card.Header><div style={{
+                        color: "#8b8ba7",
+                        marginTop: "0.6em",
+                        fontSize: "2em",
+                        lineHeight: "1.3em",
+                        fontWeight: "700",
+                    }}>
+                        Dashboard
+                </div></Card.Header>
                 <Container >
                 {this.connect(this.props.websocket)}
                 {this.build()}

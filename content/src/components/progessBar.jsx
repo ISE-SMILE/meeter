@@ -29,14 +29,14 @@ const ProgressBar = (props) => {
       fontWeight: 'bold',
       fontSize: 20
     }
+    
   
     return (
       <div style={containerStyles}>
-        <div style={fillerStyles}>
-          <span style={labelStyles}>{`${completed}%`}</span>
-        </div>
+      <div style={fillerStyles}>
+        <span style={labelStyles}>{`${completed}%`}</span>
       </div>
-       
+    </div>
       
     );
   };

@@ -7,10 +7,14 @@ import (
 type Message struct {
 	Name     string  `json:"name"`
 	Runtimes []int8  `json:"runtimes"`
-	CPU      float64 `json:"cpu"`
-	MEM      float64 `json:"mem"`
+	CPUIdle  float64 `json:"cpuIdle"`
+	CPULoad  float64 `json:"cpuLoad"`
+	MEMfree  float64 `json:"memFree"`
+	MEMTotal float64 `json:"memTotal"`
+	NETRec   float64 `json:"netRec"`
+	NETTra   float64 `json:"netTra"`
 	NET      float64 `json:"net"`
-	CPUMax   float64 `json:"cpuMax`
+	CPUMax   float64 `json:"cpuMax"`
 }
 
 type NodeMetrics struct {

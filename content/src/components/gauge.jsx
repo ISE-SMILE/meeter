@@ -104,15 +104,7 @@ const Gauge = ({
                     fill="#6a6a85"
                 />
             </svg>
-            <div style={{
-                marginTop: "0.4em",
-                fontSize: "3em",
-                lineHeight: "1em",
-                fontWeight: "900",
-                fontFeatureSettings: "'zero', 'tnum' 1",
-            }}>
-                { format(",")(value) }%
-            </div>
+        
             {!!label && (
                 <div style={{
                 color: "#8b8ba7",

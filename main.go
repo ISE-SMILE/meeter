@@ -2,16 +2,11 @@ package main
 
 import (
 	"context"
-	"log"
-	"net/http"
+	"github.com/ise-smile/meeter/collector"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/docker/docker/api/types/filters"
-
-	"github.com/ise-smile/meeter/collector"
 )
 
 const docker_metrics = 2376
@@ -23,26 +18,31 @@ func main() {
 	//run cleanup code
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-c
-		cancel()
-		os.Exit(1)
-	}()
+
 
 	metrics := collector.New(ctx, os.Args[1:], 15)
 
-	go metrics.Collect(time.Second*2, node_metrics, docker_metrics, filters.NewArgs())
+	go func() {
+		<-c
+		cancel()
+		report := make(map[string]interface{})
+		report["CIds"] = 4
+		report["HIds"] = 1
+		report["runtime"] = 13256
+		report["reads"] = 197
+		report["eLat"] = 403
+		report["cost"] = float64(13256)*0.0000000083
+		report["tps"] = 197.0/(13256/1000.0)
 
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/", fs)
 
-	http.HandleFunc("/data", metrics.Stream)
+		metrics.Finish(report)
+	}()
 
-	log.Println("Listening on :3333...")
-	err := http.ListenAndServe(":3333", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	metrics.Setup()
+	go metrics.Simulate()
+	go metrics.Render()
 
 	<-ctx.Done()
+
+	<-time.After(10*time.Second)
 }

@@ -9,7 +9,7 @@ type Message struct {
 	Runtimes []int8  `json:"runtimes"`
 	CPUIdle  float64 `json:"cpuIdle"`
 	CPULoad  float64 `json:"cpuLoad"`
-	MEMfree  float64 `json:"memFree"`
+	MEMAvail  float64 `json:"memAvail"`
 	MEMTotal float64 `json:"memTotal"`
 	NETRec   float64 `json:"netRec"`
 	NETTra   float64 `json:"netTra"`
@@ -32,7 +32,12 @@ type DockerMetrics struct {
 
 type ProgressMessage struct {
 	Messages []Message `json:"nodes"`
-	Progress []int8    `json:"progress"`
+	Progress []float64 `json:"progress"`
+
+	Info string `json:"info"`
+
 	Phase    []string  `json:"phase"`
 	Done     bool      `json:"done"`
+	Report   map[string]interface{}  `json:"report"`
+
 }

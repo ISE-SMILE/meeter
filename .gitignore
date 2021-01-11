@@ -145,3 +145,4 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/go,react,intellij
 static/
 meeter
+.idea/

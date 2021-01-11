@@ -21,7 +21,7 @@ type NodeStats struct {
 
 	Load float64 `json:"load"`
 
-	MemFree  float64 `json:"free"`
+	MemAvailable  float64 `json:"available"`
 	MemTotal float64 `json:"total"`
 
 	NetRev float64 `json:"recived"`
@@ -45,7 +45,7 @@ func CreateNodeStats(values map[string]*io_prometheus_client.MetricFamily) NodeS
 		SumCounters(values["node_forks_total"]),
 		SumGauge(values["node_disk_io_now"]),
 		SumGauge(values["node_load1"]),
-		SumGauge(values["node_memory_MemFree"]),
+		SumGauge(values["node_memory_MemAvailable"]),
 		SumGauge(values["node_memory_MemTotal"]),
 		SumGauge(values["node_network_receive_bytes"]),
 		SumGauge(values["node_network_transmit_bytes"]),
@@ -62,7 +62,7 @@ func (m *NodeStats) update(stats NodeStats) {
 	m.CPUIOWaitDelta = m.CPUIOWait - stats.CPUIOWait
 
 	m.ForksDelta = m.Froks - stats.Froks
-	m.MemUsage = stats.MemFree / stats.MemTotal
+	m.MemUsage = stats.MemAvailable / stats.MemTotal
 
 	m.CPUUser = stats.CPUUser
 	m.CPUSystem = stats.CPUSystem
@@ -70,7 +70,7 @@ func (m *NodeStats) update(stats NodeStats) {
 	m.CPUIOWait = stats.CPUIOWait
 
 	m.MemTotal = stats.MemTotal
-	m.MemFree = stats.MemFree
+	m.MemAvailable = stats.MemAvailable
 
 	m.Froks = stats.Froks
 	m.DiskUsage = stats.DiskUsage

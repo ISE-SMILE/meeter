@@ -35,7 +35,11 @@ class Dashboard extends Component {
                 const progress= data.progress
                 const phase= data.phase
                 const done =data.done
-                this.setState({nodes: nodes, progress: progress, phase:phase, done:done})
+                const report = data.report
+                const info = data.info
+
+                this.setState({nodes: nodes, progress: progress, phase:phase, done:done, report:(report!=null)?report:this.state.report,info:info})
+
             }
         }
     }
@@ -64,23 +68,21 @@ class Dashboard extends Component {
 
 
     build(){
-        var res={runtimes:[], cpuIdle:0, cpuLoad:0,memFree:0,memTotal:0,net:0, netTra:0, netRec:0}
+        var res={runtimes:[], cpuLoad:0,memUsed:0,memTotal:0,net:0, netTra:0, netRec:0}
         var node;
         for (node of this.state.nodes){
             res.runtimes=res.runtimes.concat(node.runtimes)
-            res.cpuIdle+=node.cpuIdle
-            res.cpuLoad+=node.cpuLoad
-            res.memFree+= node.memFree
+            res.cpuLoad+=(node.cpuLoad/node.cpuIdle)
+            res.memUsed+= (node.memTotal-node.memAvail)
             res.memTotal+= node.memTotal
             res.netRec+=node.netRec
             res.netTra+=node.netTra
             res.net+=node.net
-            
         }
 
         const allRuntimes= res.runtimes
-        const allCpu=res.cpuLoad/(res.cpuLoad+res.cpuIdle)
-        const allMem=(res.memTotal-res.memFree)/res.memTotal
+        const allCpu=res.cpuLoad/(this.state.nodes.length)
+        const allMem=(res.memUsed/res.memTotal)*100.00
         const allNet=(res.netRec+res.netTra)/(this.state.nodes.length*1000000000)
         return( 
             <Row key="dashboard" ><Nodeview  
@@ -94,9 +96,11 @@ class Dashboard extends Component {
          
     }
     
-    
     continue(){
-        return (this.state.done)?<Button onClick={this.props.finished} style={{float:"right"}}>Results</Button>:<div/>
+        return (this.state.done)?<Button data-id={this.state.report} onClick={()=>{
+            const report = this.state.report;
+            this.props.finished({report});
+        }} style={{float:"right"}}>Results</Button>:<div/>
         
     }
    
@@ -119,7 +123,7 @@ class Dashboard extends Component {
                 {this.build()}
                 </Container>
                
-        <Card.Footer><Container >Processing: testdata.csv {this.continue()}</Container></Card.Footer>
+        <Card.Footer><Container >{this.state.info} {this.continue()}</Container></Card.Footer>
             </Card>
             
         );

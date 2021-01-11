@@ -11,7 +11,8 @@ class Main extends Component {
         this.state = {
             ws: null,
             started: false,
-            finished: false
+            finished: false,
+            report:null
         };
     }
 
@@ -82,8 +83,9 @@ class Main extends Component {
     start = () =>{
         this.setState({started:true})
     }
-    finished = () =>{
-        this.setState({finished:true})
+    finished = (event) =>{
+        const report = event.report;
+        this.setState({finished:true,report:report})
     }
     again = () =>{
         this.setState({started:false, finished:false})
@@ -102,7 +104,7 @@ class Main extends Component {
                 </Spinner>
             </div>;}
 
-        return <Results again={this.again}/>
+        return <Results again={this.again} report={this.state.report}/>
     }
 }
 
